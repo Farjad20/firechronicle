@@ -18,7 +18,7 @@
 
 ## 1. Executive Overview & The Decadal Sensor Challenge
 
-FireChronicle is a public satellite Earth observation analytics platform tracking 19 years of active fire hotspot detections (July 2002 – December 2020) across all **568 canonical 50 km grid blocks** in **Pará, Brazil (`BR-PA`)**.
+FireChronicle is a public satellite Earth observation analytics platform tracking 19 years of active fire hotspot detections across all **568 canonical 50 km grid blocks** in **Pará, Brazil (`BR-PA`)**. The platform structures a complete 19-year, 228-calendar-month timeline (January 2002 – December 2020), spanning the 222 operational satellite months from July 2002 through December 2020 alongside 6 unsupported pre-commissioning months (January–June 2002).
 
 ![FireChronicle Interactive Map Preview](docs/images/hero-explore-map.png)
 *Figure 1: Explore Pará interactive workspace displaying the August 2005 severe drought period (~161,941 estimated detections) across the official IBGE 2024 boundary and 568 canonical 50 km blocks.*
@@ -47,12 +47,11 @@ FireChronicle presents six core modules designed for researchers, environmental 
 | Feature Module | Purpose & Capabilities | Visual Preview |
 | :--- | :--- | :---: |
 | **Explore Pará**<br>`/` | Interactive MapLibre GL choropleth rendering the official **IBGE 2024** state boundary and 568 canonical 50 km blocks (EPSG:6933). Dynamically shifts between **Warm Amber** (Estimated era) and **Vibrant Emerald** (Observed era). Hover cards and click inspection display localized block time series, hotspot detection counts, and pass coverage metadata (reconciling complete Day+Night passes and preserving NULLs for unobserved blocks). | ![Explore Map](docs/images/hero-explore-map.png) |
-| **Chico Mascot & Tour**<br>*Interactive Guide* | **Oi! I'm Chico!** A friendly firefighter mascot inspired by Amazonian conservationist Chico Mendes. Features a non-intrusive **7-step interactive onboarding tour** explaining sensor gaps, spatial grids, 222-month scrubbing, and diurnal passes. Supports keyboard shortcuts (`Arrows`, `Enter`, `Esc`) and instant tour replay. | ![Chico Tour](docs/images/chico-onboarding-tour.png) |
-| **Chico Assistant**<br>`/api/chico` | On-demand scientific guidance assistant equipped with deterministic guardrails: answers key queries regarding sensor differences, era boundaries, and missing coverage directly from a verified local rulebook. Operates in production in rulebook-fallback mode without requiring external services; optional server-side Google Gemini API integration is available via backend configuration. | ![Chico QA](docs/images/chico-qa-assistant.png) |
-| **Time Machine**<br>`/time-machine` | 19-Year Calendar Matrix (2002–2020, 228 cell-months). Accurately distinguishes unsupported pre-commissioning (Jan–Jun 2002), partial launch months (Jul 2002, Jan 2012), and the verified **March 2004 Insufficient Coverage fix** (hatched pattern; preserved `NULL`, not zero). Includes Recharts seasonal climatology and annual totals. | ![Time Machine](docs/images/time-machine-calendar.png) |
+| **Chico — Interactive Science Guide**<br>*Onboarding Tour & Q&A* (`/api/chico`) | Chico is FireChronicle's interactive science guide, featuring a seven-step onboarding tour and rule-based scientific Q&A safeguards. The current production configuration uses deterministic rulebook-fallback responses; optional generative AI integration is available through a separately configured backend adapter.<br><br>• **7-Step Onboarding Tour:** Inspired by Amazonian conservationist Chico Mendes, Chico introduces users to sensor discontinuities, spatial grids, the 228-month calendar timeline (222 operational months from July 2002 through December 2020, with Jan–Jun 2002 unsupported), and diurnal overpasses. Fully keyboard accessible (`Arrows`, `Enter`, `Esc`) with instant tour replay.<br>• **Safeguarded Science Guidance:** Directly answers queries regarding sensor differences, era boundaries, and missing coverage from an audited local rulebook without requiring external network services. | ![Chico Tour](docs/images/chico-onboarding-tour.png)<br><br>![Chico QA](docs/images/chico-qa-assistant.png) |
+| **Time Machine**<br>`/time-machine` | 19-Year Calendar Matrix spanning all 228 calendar months (January 2002 – December 2020). Clearly separates the 6 unsupported pre-commissioning months (Jan–Jun 2002, preserved as `NULL`) from the 222 operational months (July 2002 – December 2020). Accurately distinguishes partial observation launch periods (July 2002, January 2012) and the audited **March 2004 Insufficient Coverage fix** (hatched visual pattern; preserved as `NULL`, not zero). Neither 228 nor 222 implies universal data availability: orbital gaps and missing passes are strictly maintained as unobserved `NULL` values. Includes Recharts seasonal climatology and annual totals. | ![Time Machine](docs/images/time-machine-calendar.png) |
 | **Sensor Lab**<br>`/sensor-lab` | Transparent public evaluation lab presenting authoritative holdout validation benchmarks (Strategy A Temporal & Strategy B Geographic), full GLM NB2 parameters, and a multi-decadal continuous timeline with an interactive raw Aqua MODIS reference toggle. | ![Sensor Lab](docs/images/sensor-lab-benchmarks.png) |
 | **Responsive Interface**<br>*Mobile & Desktop* | Touch-friendly responsive layout supporting phone and tablet viewports with collapsable analytical sheets, touch-optimized temporal scrubbing, and fluid MapLibre viewport controls. | ![Mobile Responsive](docs/images/mobile-responsive.png) |
-| **CSV Data Export**<br>*RFC 4180 Standard* | One-click instant data export for Statewide Pará or any individual 50 km block across all 228 months. Fully preserves `NULL` values and separates Day, Night, and strict `daynight=ALL` observation channels. | *Available on all views* |
+| **CSV Data Export**<br>*RFC 4180 Standard* | One-click instant data export for Statewide Pará or any individual 50 km block across the complete 228-month calendar grid (including the 6 pre-commissioning `NULL` rows and the 222 operational months from July 2002 to December 2020). Fully preserves `NULL` values for unobserved or incomplete passes and separates Day, Night, and strict `daynight=ALL` observation channels according to RFC 4180 standards. | *Available on all views* |
 
 ---
 
@@ -89,10 +88,11 @@ FireChronicle adheres strictly to the **Team Scientific Rulebook** and NASA Eart
 2. **Missing Satellite Coverage $\neq$ Zero Fires:** Orbital gaps, sensor outages, and cloud obscuration prevent thermal detection. An unobserved block or month is strictly preserved as `NULL` / empty, never zero.
 3. **Strict Day/Night Aggregation Contract (`daynight=ALL`):** At the 50 km block level, a combined Day+Night total is valid if and only if both passes exist; if either pass is missing, the combined value remains `NULL`. Statewide sums aggregate exclusively complete D+N pairs to eliminate diurnal sampling bias.
 4. **Verified March 2004 Coverage Fix:** In March 2004, Aqua MODIS experienced orbital pass gaps resulting in zero complete D+N pairs. The platform displays March 2004 with a distinct hatched visual pattern and status `insufficient_coverage` (`value = null`), eliminating the historical defect where an incomplete month appeared falsely as zero fire activity.
-5. **Partial Period Accounting:**
-   - **January–June 2002:** NASA Aqua was launched on May 4, 2002. Operational active fire science data began in July 2002. Months prior to July 2002 are marked as unsupported pre-commissioning (`null`).
-   - **July 2002:** First operational month; badged as a partial observation (3,462.9 estimated detections).
-   - **January 2012:** S-NPP VIIRS archive began on January 20, 2012 (days 1–19 unobserved). Badged as a partial observation (445 detections) and excluded from model calibration.
+5. **Timeline Accounting (228 Calendar Months vs. 222 Operational Months):**
+   - The full 19-year timeline encompasses **228 calendar months** (19 years × 12 months, 2002–2020).
+   - **January–June 2002 (6 months):** NASA Aqua was launched on May 4, 2002; operational active fire science data began in July 2002. The first 6 calendar months are preserved as unsupported pre-commissioning (`null`).
+   - **July 2002 – December 2020 (222 months):** Constitute the active operational satellite observation window.
+   - **Partial Coverage & Preserved NULLs:** Citing 222 operational months does not imply all months contain complete or valid observations. Launch periods (July 2002 with 3,462.9 estimated detections; January 2012 with 445 detections) represent partial observations, pass-deficient periods (such as March 2004) lack complete Day+Night coverage, and unobserved passes or blocks are strictly preserved as `NULL`, never assumed to represent zero fire activity.
 6. **Spatial Scale Integrity:** All historical inferences remain strictly at the 50 km canonical grid cell level (NSIDC EASE-Grid 2.0 Global, EPSG:6933). No sub-block downscaling (e.g., 10 km) is fabricated.
 7. **No Future Event Prediction:** FireChronicle reconstructs historical observations; it does not forecast future wildfire outbreaks.
 8. **Calibration Domain Shift & Drought Extrapolation:** The model was trained on 2012–2020 observations (maximum observed MODIS count $M = 504$). Historical severe drought years (notably 2004, 2005, 2007, and 2010) featured extreme burning activity, including 35 block-months where MODIS counts exceeded $M = 504$ (reaching up to $M = 1,001$). While the log-linear formulation preserves monotonicity, predictions above $M = 504$ represent parametric extrapolation beyond empirical training support.
@@ -126,7 +126,7 @@ public/data/ (Default)      Backend Service             Local UI Development
        └───────────────────────────┼───────────────────────────┘
                                    ▼
                      NEXT.JS 16 FRONTEND PLATFORM
-        MapLibre GL JS • Recharts • Chico Mascot • Tailwind CSS
+        MapLibre GL JS • Recharts • Chico Science Guide • Tailwind CSS
 ```
 
 ### Pluggable DataClient Architecture
@@ -142,6 +142,7 @@ The frontend abstracts all scientific data queries through a typed `DataClient` 
 - **Framework:** Next.js 16.4.6 with React 19 and Turbopack.
 - **Geospatial Mapping:** MapLibre GL JS v6 with OpenFreeMap vector basemaps.
 - **Visual Analytics:** Recharts v3 for responsive multi-decadal and seasonal time series.
+- **Interactive Science Guide:** Chico onboard guide with 7-step accessible tour and rule-safeguarded Q&A endpoint (`/api/chico`, featuring deterministic rulebook fallback and optional backend LLM adapter).
 - **Styling & Components:** Tailwind CSS with Lucide React icons.
 - **Backend Service (Live Mode):** Python 3.12, FastAPI, DuckDB analytical database engine.
 - **Data Science & Statistics:** Python, NumPy, Pandas, SciPy, statsmodels.
@@ -156,7 +157,7 @@ Developed for the **NASA Space Apps Challenge 2026**.
 | :--- | :--- | :--- |
 | **Inan Dilir Hamim**<br>([@inan001](https://github.com/inan001)) | **Team Lead & Frontend UI/UX Designer** | Project architecture, UI/UX design leadership, repository maintenance, component styling, and Vercel release management. |
 | **Syed Farjad Arefeen**<br>([@Farjad20](https://github.com/Farjad20)) | **Data Scientist & Frontend Developer** | Formulated, trained, and validated the authoritative **NB2 v1.0** harmonization model ($\alpha = 0.3394$, $k = 6.0538$); engineered the 2002–2011 historical reconstruction pipeline; executed temporal and geographic holdout benchmarks; implemented Next.js frontend architecture, MapLibre 50 km choropleth, Recharts suite, Sensor Lab, and CSV data export engine. |
-| **Sufian Amin Nabil**<br>([@fairjordan04](https://github.com/fairjordan04)) | **Backend & AI Chatbot Developer** | Developed FastAPI backend endpoints, DuckDB analytical integration, spatial REST routes, Chico mascot tour guide (`ChicoTourGuide.tsx`), and Chico AI Q&A assistant (`/api/chico`). |
+| **Sufian Amin Nabil**<br>([@fairjordan04](https://github.com/fairjordan04)) | **Backend & AI Chatbot Developer** | Developed FastAPI backend endpoints, DuckDB analytical integration, spatial REST routes, Chico mascot onboarding tour guide (`ChicoTourGuide.tsx`), and rule-safeguarded Chico Q&A assistant route (`/api/chico`). |
 | **Syed Fahmid Arefeen**<br>([@Fahmid33](https://github.com/Fahmid33)) | **Data Engineer & Scientific Data Integrity Specialist** | Formulated MODIS and VIIRS historical data extraction pipelines in Google Colab; authored the critical March 2004 coverage fix distinguishing insufficient coverage from zero; audited NASA FIRMS data contracts. |
 | **Arwah Tasfia** | **Video Production & Multimedia Communication Specialist** | Conceptualized, produced, and edited the official competition submission video; structured scientific narrative communication and multimedia visual presentation. |
 | **Anika Nawar Islam** | **Video Production & Multimedia Communication Specialist** | Scripted, recorded, and finalized competition presentation media; coordinated visual branding and community science storytelling. |
