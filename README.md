@@ -179,7 +179,7 @@ Key model specifications, validation benchmark summaries, evaluation scripts, an
 > - **Directly Verifiable Artifacts:** Frozen model parameters, coefficients, model cards, and precomputed validation metrics JSON can be directly inspected in the repository without external downloads.
 > - **Automated Test Verification:** Data schemas, coverage rules, and contract reconciliations are automatically verified by the test runner (`npm test`, executing 42 passing tests).
 > - **Scripted Model Logic:** Python modeling modules (`model/negative_binomial.py`, `model/validation_pipeline.py`) can be executed on prepared tabular inputs.
-> - **Full End-to-End Raw Reproduction:** Re-running the pipeline from raw satellite swath granules requires downloading the multi-gigabyte NASA FIRMS archive (`MCD14DL` and `VNP14IMGTDL`) from NASA Earthdata and running the external Google Colab extraction workflows. A single automated script executing raw satellite data ingestion through final GeoJSON compilation has not been executed or bundled in this repository.
+> - **Full End-to-End Raw Reproduction:** Re-running the pipeline from raw satellite active-fire records requires downloading the multi-gigabyte NASA FIRMS archive products (`MCD14DL` and `VNP14IMGTDL`) from NASA Earthdata and running the external Google Colab extraction workflows. A single automated script executing raw satellite active-fire data ingestion through final GeoJSON compilation has not been executed or bundled in this repository.
 
 ---
 
