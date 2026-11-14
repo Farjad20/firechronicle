@@ -38,6 +38,14 @@ FireChronicle bridges this 10-year observational gap:
 2. **Negative Binomial GLM (NB2 v1.0):** An empirically fitted Generalized Linear Model accounting for strong overdispersion ($\alpha = 0.3394$), seasonal fixed effects, and diurnal day/night overpass dynamics.
 3. **Strict Era Separation:** Reconstructs VIIRS-equivalent historical activity back to July 2002 while strictly distinguishing the **Estimated Era (2002–2011)** from the **Observed Era (2012–2020)**.
 
+### Why FireChronicle Matters
+
+Understanding how fire activity changes across decades is important for studying the Amazon's environment. But when satellite sensors detect hotspots differently, changes in the recorded counts may reflect differences in the instruments rather than changes in fire activity alone.
+
+FireChronicle helps environmental researchers, conservation organizations, and Earth-observation analysts explore historical fire-detection patterns more consistently. By connecting statistically estimated historical detections with observed VIIRS records—and making the results accessible through interactive maps and timelines—it supports more informed interpretation of long-term environmental data.
+
+**Our goal is simple: make decades of satellite fire observations easier to compare, explore, and understand.**
+
 ---
 
 ## 2. Interactive Feature Gallery
