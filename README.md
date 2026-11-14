@@ -13,7 +13,7 @@
 > **Team:** Team Meghna  
 > **Production Platform:** [https://firechronicle.vercel.app/](https://firechronicle.vercel.app/)  
 > **Authoritative Release Branch:** `main` (Commit `dd6bd84`)  
-> 🎬 **Submission Video:** *[Official 30-Second Video Submission Link — To be added by Team Meghna upon upload]*  
+> 🎬 **Submission Video:** *(Link pending final video upload by Team Meghna)*  
 
 ---
 
@@ -64,12 +64,20 @@ FireChronicle is designed to provide actionable historical context for researche
 > - **Plausible Decision Support:** The applications above represent prospective research and decision-support use cases; FireChronicle does not claim proven field policy interventions or documented regulatory outcomes.
 
 #### Illustrative Case Study: The August 2005 Amazon Drought in Pará
-During the severe 2005 Amazon drought, eastern and southern Pará experienced intense burning. In FireChronicle's precomputed historical dataset ([`public/data/timeseries/statewide_monthly.json`](public/data/timeseries/statewide_monthly.json)), **August 2005** exhibits an estimated statewide total of **~161,941 VIIRS-equivalent hotspot detections** (`161,940.5` model estimate; source: Historical Aqua MODIS → NB2 v1.0).
+During the severe 2005 Amazon drought, eastern and southern Pará experienced intense burning. In FireChronicle's precomputed historical dataset ([`public/data/timeseries/statewide_monthly.json`](public/data/timeseries/statewide_monthly.json)), **August 2005** (`period = "2005-08"`, `region_id = "BR-PA"`) records a statewide total of **161,940.5 estimated VIIRS-equivalent hotspot detections** (commonly rounded to ~161,941).
 
-Using FireChronicle, a researcher can:
-1. **Navigate the Time Machine:** Immediately identify August 2005 as an extreme historical outlier within the 228-month calendar matrix.
-2. **Inspect Spatial Concentration:** Examine the Explore Pará choropleth to observe how detections concentrated heavily along the "Arc of Deforestation" in southern and south-eastern 50 km grid blocks.
-3. **Verify Pass Coverage & Integrity:** Inspect metadata showing that this statewide figure aggregates **177 complete Day+Night block pairs** under the strict `daynight=ALL` rule, while **163 single-pass blocks are preserved as `NULL`** rather than assuming missing daytime or nighttime passes had zero fires.
+> [!IMPORTANT]
+> **Measurement Units & Detection Meaning:**  
+> The measurement unit is `VIIRS_S-NPP-equivalent_detection_count`. This value is a statistical model estimate (Aqua MODIS $\rightarrow$ frozen NB2 v1.0 GLM) representing satellite thermal radiation anomaly pixel detections at overpass times. It must **not** be interpreted as 161,940 individual ground wildfire incidents.
+
+**Coverage Scope & Data Reconciliation:**
+- **Expected Passes:** 1,136 total passes across all 568 canonical blocks (568 Day + 568 Night).
+- **Available Estimated Passes:** 517 passes across the state.
+- **Complete Day+Night Pairs:** Exactly **177 blocks** possessed complete Day and Night passes; their calibrated sum constitutes the official `161,940.5` strict statewide total.
+- **Incomplete / Single-Pass Blocks:** **163 blocks** had only a single pass (Day or Night). Under FireChronicle's strict `daynight=ALL` contract, these 163 blocks are preserved as `NULL` in the statewide sum to prevent diurnal sampling bias (their available single-pass sum of `169,376.6` is preserved separately in metadata).
+- **Unobserved Blocks:** **228 blocks** had zero available estimated passes in this period.
+
+Using FireChronicle, a researcher can navigate the Time Machine to inspect August 2005 as an extreme drought period, observe localized hotspot concentrations along the southern and eastern "Arc of Deforestation" blocks, and audit the complete-versus-incomplete pass coverage metadata directly in the Analysis Panel.
 
 ### What Makes FireChronicle Different?
 
@@ -82,7 +90,7 @@ FireChronicle delivers a scientifically grounded, end-to-end integration address
 3. **Strict Era Separation:** Clearly partitions the 19-year timeline into the **Estimated Era (2002–2011)** and **Observed Era (2012–2020)** with distinct visual palettes (Warm Amber vs. Vibrant Emerald), preventing misinterpretation of model estimates as direct satellite observations.
 4. **Explicit Scientific Treatment of Data Gaps:** Preserves orbital gaps, partial launch months, and incomplete diurnal passes as `NULL`, eliminating historical reporting defects where missing satellite passes falsely appeared as zero fire activity (demonstrated by the audited March 2004 coverage fix).
 5. **Integrated Analytical & Educational Toolset:** Combines interactive MapLibre GL spatial choropleths, a 19-year calendar matrix with Recharts seasonal climatology, the transparent Sensor Lab validation bench, and Chico Mendes-inspired guided onboarding with rule-based scientific safeguards.
-6. **Open Science & Direct Reproducibility:** Features a public test suite (42 automated tests), complete holdout validation benchmarks, and one-click RFC 4180 CSV data exports with strict NULL preservation across all 228 calendar months.
+6. **Open Science & Transparent Validation:** Features a public test suite (42 automated tests), complete holdout validation benchmarks, inspectable model artifacts, and one-click RFC 4180 CSV data exports with strict NULL preservation across all 228 calendar months.
 
 > [!NOTE]
 > **Innovation Scope:** FireChronicle does not claim to have invented Negative Binomial regression, nor does it claim that NASA FIRMS does not already provide invaluable Earth observation data. We do not claim this is the world's first fire dashboard, nor that our statistical model generalizes globally without regional recalibration. The project's innovation lies in its rigorous, end-to-end methodology, transparent handling of satellite discontinuities, and accessible implementation specifically engineered for Pará, Brazil.
@@ -151,9 +159,9 @@ The NB2 v1.0 training population consists of **23,010 paired-positive cell-month
 > - **Severe Drought Extrapolation ($M > 504$):** During the 2012–2020 training period, the maximum observed monthly block MODIS count was $M = 504$. In historical extreme drought years (2004, 2005, 2007, and 2010), 35 block-months exceeded $M = 504$ (reaching up to $M = 1,001$). Model predictions above $M = 504$ represent parametric extrapolation beyond empirical training bounds.
 > - **Geographic Specificity:** Calibration parameters reflect the burning regimes, land-cover characteristics, and atmospheric conditions of Pará, Brazil. They cannot be assumed to apply to other biomes or geographic regions without empirical recalibration.
 
-### Reproducing the Scientific Results
+### Inspecting and Reproducing Scientific Results
 
-All model specifications, validation outputs, and evaluation scripts are preserved directly within the repository for full scientific reproducibility:
+Key model specifications, validation benchmark summaries, evaluation scripts, and data contracts are preserved directly within the repository for inspection, testing, and independent verification:
 
 | Artifact / Milestone | Repository Relative Path | Description |
 | :--- | :--- | :--- |
@@ -166,7 +174,12 @@ All model specifications, validation outputs, and evaluation scripts are preserv
 | **Data Engineering Notebooks** | [`data-engineering/notebooks/firechronicle_historical_aqua_modis_2002_2011.ipynb`](data-engineering/notebooks/firechronicle_historical_aqua_modis_2002_2011.ipynb)<br>[`data-engineering/notebooks/FireChronicle_MODIS_VIIRS_2012_2020.ipynb`](data-engineering/notebooks/FireChronicle_MODIS_VIIRS_2012_2020.ipynb) | Google Colab workflows extracting raw NASA FIRMS records, clipping to the IBGE boundary, and aggregating to 50 km blocks. |
 | **Contract & Integrity Tests** | [`tests/daynight-contract.test.mjs`](tests/daynight-contract.test.mjs)<br>[`tests/content-and-provenance.test.mjs`](tests/content-and-provenance.test.mjs) | Automated Node.js tests verifying strict `daynight=ALL` reconciliation, NULL preservation, and status labels. |
 
-*Prerequisite Note:* Precomputed validation metrics, model parameters, and test suites can be audited immediately within the repository. Re-running the raw data extraction pipelines from scratch requires downloading the raw NASA FIRMS archive datasets (`MCD14DL` and `VNP14IMGTDL`) from NASA Earthdata.
+> [!NOTE]
+> **Reproducibility Scope & Data Prerequisites:**
+> - **Directly Verifiable Artifacts:** Frozen model parameters, coefficients, model cards, and precomputed validation metrics JSON can be directly inspected in the repository without external downloads.
+> - **Automated Test Verification:** Data schemas, coverage rules, and contract reconciliations are automatically verified by the test runner (`npm test`, executing 42 passing tests).
+> - **Scripted Model Logic:** Python modeling modules (`model/negative_binomial.py`, `model/validation_pipeline.py`) can be executed on prepared tabular inputs.
+> - **Full End-to-End Raw Reproduction:** Re-running the pipeline from raw satellite swath granules requires downloading the multi-gigabyte NASA FIRMS archive (`MCD14DL` and `VNP14IMGTDL`) from NASA Earthdata and running the external Google Colab extraction workflows. A single automated script executing raw satellite data ingestion through final GeoJSON compilation has not been executed or bundled in this repository.
 
 ---
 
@@ -189,17 +202,17 @@ FireChronicle adheres strictly to the **Team Scientific Rulebook** and NASA Eart
 
 ### Historical Timeframe & Study Scope (2002–2020)
 
-Why does FireChronicle examine observations through December 2020 rather than up to the present day?
+FireChronicle's verified dataset covers the 19-year study window from **July 2002 through December 2020**, comprising two distinct observational eras:
 
-1. **Balanced Reconstruction & Overlap Design:** The July 2002 – December 2020 window was established as the defined research scope to create two balanced multi-year periods:
-   - **Historical Reconstruction Window (July 2002 – December 2011):** 9.5 years where only Aqua MODIS active-fire data existed, requiring statistical harmonization to estimate VIIRS-equivalent detections.
-   - **Empirical Overlap Window (January 2012 – December 2020):** 9 years of concurrent Aqua MODIS and Suomi-NPP VIIRS observations, providing the 23,010 paired-positive observations necessary to train and validate the NB2 v1.0 model.
-2. **Analytical Archive vs. Live Feed:** FireChronicle is designed and presented as a multi-decadal historical Earth observation analytics platform, not a live-fire emergency alert service or continuously updated streaming feed.
-3. **Rigorous Timeline Accounting:** Across the full 19-year timeframe:
-   - **228 Calendar Months:** Complete monthly grid (January 2002 – December 2020).
-   - **6 Unsupported Months:** January–June 2002 (pre-commissioning period of NASA Aqua, launched May 4, 2002; preserved as `NULL`).
-   - **222 Operational Months:** Active satellite science window (July 2002 – December 2020).
-   - **Preserved Gaps:** Orbital gaps (e.g., March 2004) and incomplete Day/Night observations remain strictly recorded as unobserved `NULL` values.
+1. **Estimated Era (July 2002 – December 2011 · 114 operational months):** Prior to the operational launch of Suomi-NPP VIIRS, active fire detection relied on Aqua MODIS (1 km). FireChronicle uses the frozen NB2 v1.0 model to estimate VIIRS-equivalent detections across this 9.5-year historical period.
+2. **Observed Era (January 2012 – December 2020 · 108 operational months):** Following the launch of Suomi-NPP VIIRS (375 m), both sensors operated concurrently. This 9-year overlap period provided the empirical calibration foundation (23,010 paired-positive cell-months) used to fit and validate the NB2 v1.0 model.
+3. **Analytical Historical Scope vs. Real-Time Feeds:** FireChronicle is architected and presented as a multi-decadal historical analytical archive and research platform. It does not ingest real-time satellite telemetry or function as an active-fire alert service.
+4. **Terminal Cutoff Confirmation:** The compiled dataset in this repository concludes at December 2020. Specific considerations that established this end date (such as FIRMS archive extraction windows during data engineering, computational scope for 50 km aggregation, or team project milestones) remain subject to final confirmation by Team Meghna.
+5. **Timeline Accounting:** Across the full 19-year calendar grid:
+   - **228 Calendar Months:** Complete monthly matrix (January 2002 – December 2020).
+   - **6 Pre-Commissioning Months:** January–June 2002 (Aqua launched May 4, 2002; operational science records began July 2002; preserved as `NULL`).
+   - **222 Operational Months:** Active satellite observation window (July 2002 – December 2020).
+   - **Preserved Gaps:** Missing passes (e.g., March 2004) and incomplete Day/Night observations remain strictly preserved as unobserved `NULL` values.
 
 ---
 
@@ -332,12 +345,12 @@ npm run build
 ### Artificial Intelligence Disclosure
 In accordance with NASA Space Apps Challenge 2026 guidelines, generative AI and agentic coding assistants (Google DeepMind Antigravity and Anthropic Claude) were utilized throughout the project lifecycle to assist with code refactoring, test suite development, UI layout scaffolding, and browser QA automation. All scientific research questions, statistical formulation (GLM NB2 specifications and holdout validation protocols), data engineering pipelines, domain rules, and final architectural evaluations were formulated, critically reviewed, and directed by the members of Team Meghna.
 
-### License & Intellectual Property Notice
+### License & Submission Notice
 
 License: Not yet specified. Licensing decisions remain with Team Meghna.
 
 > [!NOTE]
-> **NASA Space Apps Challenge 2026 Participant Terms Notice:**  
-> The official [NASA Space Apps Challenge Participant Terms](https://www.spaceappschallenge.org/legal/) require teams to provide appropriate licensing documentation for Solution Materials and source attributions. The terms state that if no open-source license is specified, NASA may distribute original submitted materials under the Apache License 2.0 for competition evaluation and public showcase purposes.  
+> **NASA Space Apps Challenge 2026 Submission Notice:**  
+> Under the [NASA Space Apps Challenge Participant Terms](https://www.spaceappschallenge.org/legal/), participants are responsible for documenting licensing for Solution Materials and providing source attribution for third-party content. The terms note that NASA may distribute submitted challenge materials under the Apache License 2.0 if an open-source license is not otherwise specified.  
 > 
-> *Team Meghna Legal Status:* While NASA's terms address original submission materials for challenge administration, they do not resolve copyright ownership, third-party dataset compliance, or licensing terms across the full multi-contributor git repository. Formal selection of an open-source license (such as MIT or Apache 2.0) requires verified authorization from all six contributing team members and is currently flagged as an outstanding action item for Team Meghna consensus prior to final release.
+> Formal selection of an open-source license for this repository remains an unresolved team decision pending explicit review and authorization by Team Meghna.
