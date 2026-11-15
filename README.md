@@ -12,10 +12,14 @@
 > **NASA Space Apps Challenge 2026** — *[Harmonization of MODIS and VIIRS Hot Spots](https://www.spaceappschallenge.org/2026/challenges/modis-and-viirs-hot-spots/)*  
 > **Team:** Team Meghna  
 > **Production Platform:** [https://firechronicle.vercel.app/](https://firechronicle.vercel.app/)  
-> **Authoritative Release Branch:** `main` (Commit `dd6bd84`)  
-> 🎬 **Submission Video:** *(Link pending final video upload by Team Meghna)*  
+> **Official Repository:** [Team Meghna — FireChronicle](https://github.com/inan001/firechronicle)  
+> **Release Branch:** [`main`](https://github.com/inan001/firechronicle/tree/main)  
+> 🎬 **Official 30-Second Competition Video:** [Watch FireChronicle — Team Meghna on YouTube](https://www.youtube.com/watch?v=_gfLNVskcRE)  
 
 ---
+
+[![Watch FireChronicle — Official NASA Space Apps Challenge 2026 Video](https://img.youtube.com/vi/_gfLNVskcRE/hqdefault.jpg)](https://www.youtube.com/watch?v=_gfLNVskcRE)  
+*Watch Team Meghna's official 30-second competition demonstration video on YouTube.*
 
 ## 1. Executive Overview & The Decadal Sensor Challenge
 
@@ -342,8 +346,11 @@ npm run build
 - **NSIDC EASE-Grid 2.0 Global (EPSG:6933):** Canonical 50 km equal-area spatial grid blocks, National Snow and Ice Data Center.
 - **OpenFreeMap / OpenMapTiles:** Vector basemap tile services derived from OpenStreetMap contributors. [https://openfreemap.org/](https://openfreemap.org/)
 
-### Artificial Intelligence Disclosure
-In accordance with NASA Space Apps Challenge 2026 guidelines, generative AI and agentic coding assistants (Google DeepMind Antigravity and Anthropic Claude) were utilized throughout the project lifecycle to assist with code refactoring, test suite development, UI layout scaffolding, and browser QA automation. All scientific research questions, statistical formulation (GLM NB2 specifications and holdout validation protocols), data engineering pipelines, domain rules, and final architectural evaluations were formulated, critically reviewed, and directed by the members of Team Meghna.
+### AI-Assisted Development
+
+FireChronicle was developed by Team Meghna with substantial assistance from generative AI and agentic development tools, including Antigravity and Claude, for software implementation, debugging, documentation, testing, and quality assurance.
+
+Team members guided the project's requirements, scientific objectives, methodological choices, and final review. The model's reported evaluation results, data provenance, implementation, and limitations are documented in this repository for independent examination.
 
 ### License & Submission Notice
 
