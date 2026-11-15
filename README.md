@@ -77,11 +77,11 @@ During the severe 2005 Amazon drought, eastern and southern Pará experienced in
 **Coverage Scope & Data Reconciliation:**
 - **Expected Passes:** 1,136 total passes across all 568 canonical blocks (568 Day + 568 Night).
 - **Available Estimated Passes:** 517 passes across the state.
-- **Complete Day+Night Pairs:** Exactly **177 blocks** possessed complete Day and Night passes; their calibrated sum constitutes the official `161,940.5` strict statewide total.
-- **Incomplete / Single-Pass Blocks:** **163 blocks** had only a single pass (Day or Night). Under FireChronicle's strict `daynight=ALL` contract, these 163 blocks are preserved as `NULL` in the statewide sum to prevent diurnal sampling bias (their available single-pass sum of `169,376.6` is preserved separately in metadata).
+- **Complete Day+Night Pairs:** Exactly **177 blocks** possessed complete Day and Night passes; their calibrated sum constitutes the official `161,940.5` strict statewide total (conditional on valid complete-pair coverage, rather than a full census of all blocks across the state).
+- **Incomplete / Single-Pass Blocks:** **163 blocks** had only a single pass (Day or Night). Under FireChronicle's strict `daynight=ALL` contract, these 163 blocks are preserved as `NULL` in the statewide sum to maintain consistent diurnal sampling criteria and reduce potential bias caused by incomplete overpass coverage (their available single-pass sum of `169,376.6` is preserved separately in metadata).
 - **Unobserved Blocks:** **228 blocks** had zero available estimated passes in this period.
 
-Using FireChronicle, a researcher can navigate the Time Machine to inspect August 2005 as an extreme drought period, observe localized hotspot concentrations along the southern and eastern "Arc of Deforestation" blocks, and audit the complete-versus-incomplete pass coverage metadata directly in the Analysis Panel.
+Using FireChronicle, a researcher can navigate the Time Machine to inspect August 2005 as an extreme drought period (illustrated in Figure 1 above), observe localized hotspot concentrations along the southern and eastern "Arc of Deforestation" blocks, and audit the complete-versus-incomplete pass coverage metadata directly in the Analysis Panel.
 
 ### What Makes FireChronicle Different?
 
@@ -193,7 +193,7 @@ FireChronicle adheres strictly to the **Team Scientific Rulebook** and NASA Eart
 
 1. **Hotspot Detections $\neq$ Wildfire Incidents:** A satellite active-fire hotspot represents a 375 m or 1 km pixel footprint exhibiting a thermal radiation anomaly at satellite overpass time. A single large wildfire can generate dozens of contiguous pixel detections over successive overpasses, whereas smaller fires beneath dense forest canopy or obscured by cloud and smoke cover may produce none. Detections must never be cited as discrete wildfire perimeter counts.
 2. **Missing Satellite Coverage $\neq$ Zero Fires:** Orbital gaps, sensor outages, and cloud obscuration prevent thermal detection. An unobserved block or month is strictly preserved as `NULL` / empty, never zero.
-3. **Strict Day/Night Aggregation Contract (`daynight=ALL`):** At the 50 km block level, a combined Day+Night total is valid if and only if both passes exist; if either pass is missing, the combined value remains `NULL`. Statewide sums aggregate exclusively complete D+N pairs to eliminate diurnal sampling bias.
+3. **Strict Day/Night Aggregation Contract (`daynight=ALL`):** At the 50 km block level, a combined Day+Night total is valid if and only if both passes exist; if either pass is missing, the combined value remains `NULL`. Statewide sums aggregate exclusively complete Day/Night pairs to maintain consistent diurnal sampling criteria and reduce potential bias caused by incomplete overpass coverage.
 4. **Verified March 2004 Coverage Fix:** In March 2004, Aqua MODIS experienced orbital pass gaps resulting in zero complete D+N pairs. The platform displays March 2004 with a distinct hatched visual pattern and status `insufficient_coverage` (`value = null`), eliminating the historical defect where an incomplete month appeared falsely as zero fire activity.
 5. **Timeline Accounting (228 Calendar Months vs. 222 Operational Months):**
    - The full 19-year timeline encompasses **228 calendar months** (19 years × 12 months, 2002–2020).
@@ -211,7 +211,7 @@ FireChronicle's verified dataset covers the 19-year study window from **July 200
 1. **Estimated Era (July 2002 – December 2011 · 114 operational months):** Prior to the operational launch of Suomi-NPP VIIRS, active fire detection relied on Aqua MODIS (1 km). FireChronicle uses the frozen NB2 v1.0 model to estimate VIIRS-equivalent detections across this 9.5-year historical period.
 2. **Observed Era (January 2012 – December 2020 · 108 operational months):** Following the launch of Suomi-NPP VIIRS (375 m), both sensors operated concurrently. This 9-year overlap period provided the empirical calibration foundation (23,010 paired-positive cell-months) used to fit and validate the NB2 v1.0 model.
 3. **Analytical Historical Scope vs. Real-Time Feeds:** FireChronicle is architected and presented as a multi-decadal historical analytical archive and research platform. It does not ingest real-time satellite telemetry or function as an active-fire alert service.
-4. **Terminal Cutoff Confirmation:** The compiled dataset in this repository concludes at December 2020. Specific considerations that established this end date (such as FIRMS archive extraction windows during data engineering, computational scope for 50 km aggregation, or team project milestones) remain subject to final confirmation by Team Meghna.
+4. **Historical Study Cutoff (December 2020):** FireChronicle analyzes a defined historical dataset ending in December 2020. The July 2002–December 2011 period is reconstructed using statistical estimates, while the January 2012–December 2020 period supplies observed VIIRS records and the sensor-overlap data used for calibration and evaluation. The platform is a historical analysis tool, not a live-fire feed.
 5. **Timeline Accounting:** Across the full 19-year calendar grid:
    - **228 Calendar Months:** Complete monthly matrix (January 2002 – December 2020).
    - **6 Pre-Commissioning Months:** January–June 2002 (Aqua launched May 4, 2002; operational science records began July 2002; preserved as `NULL`).
