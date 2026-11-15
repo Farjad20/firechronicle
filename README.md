@@ -45,6 +45,16 @@ FireChronicle focuses on a clearly defined geographic area rather than assuming 
 
 This regional focus supports geographically interpretable results, transparent validation, and a reproducible case study of satellite sensor harmonization. **The frozen NB2 v1.0 model is calibrated specifically for Pará; applying it elsewhere would require additional regional calibration and evaluation.** For regional fire-management context, see [IPAM — Gestão do Fogo na Amazônia: Pará](https://ipam.org.br/wp-content/uploads/2025/10/PA-PARA-Gestao-do-Fogo-Amazonia_WSM_V8-ALTA-1.pdf).
 
+### Current Scope & Future Expansion
+
+**Current capability:** FireChronicle is a working, regionally calibrated historical Earth-observation platform focused on **Pará, Brazil**. Its 568 canonical approximately 50 km equal-area grid blocks and frozen NB2 v1.0 model support harmonized analysis of satellite active-fire detections within the project's defined **2002–2020 historical dataset**.
+
+**Future direction:** Team Meghna intends to extend this approach to **other Brazilian Amazon states**, with the longer-term goal of investigating coverage across the **wider Amazon basin and potentially other fire-affected regions**. We also aim to explore extending the historical record beyond December 2020, improving scientific accessibility, and strengthening regional and temporal validation.
+
+**Scientific requirements for expansion:** Broader coverage is not a simple geographic extension of the existing model. Each additional region or observation period would require authentic satellite data processing, spatial-grid preparation, assessment of Day/Night observation completeness, and appropriate recalibration or independent validation of the MODIS–VIIRS harmonization model. Post-2020 expansion would additionally require assessing changes in Aqua MODIS sampling conditions associated with documented orbital drift beginning in 2021.
+
+**Development status:** These are proposed future research and engineering directions, **not features currently deployed or validated**. FireChronicle does not currently provide global coverage, live wildfire alerts, or future-fire prediction.
+
 ### The Scientific Solution: Empirically Calibrated Harmonization
 FireChronicle bridges this 10-year observational gap:
 1. **Nine Years of Direct Overlap:** Calibrated on 23,010 paired-positive cell-months ($M > 0$ and $V > 0$) across the 2012–2020 concurrent observation window.
